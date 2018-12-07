@@ -1,0 +1,40 @@
+var abi=[{
+		"constant": false,
+		"inputs": [],
+		"name": "getItemPrice",
+		"outputs": [{"name": "","type": "uint256"}],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},{
+		"constant": false,
+		"inputs": [{"name": "_bidAmt","type": "uint256"}],
+		"name": "bid",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},{	
+		"constant": false,
+		"inputs": [{"name": "_price","type": "uint256"}],
+		"name": "setItem",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},{
+		"constant": false,
+		"inputs": [{"name": "_address","type": "address"}],
+		"name": "getBid",
+		"outputs": [{"name": "","type": "uint256"}],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},{
+		"inputs": [{"name": "_addressA","type": "address"},
+			{"name": "_addressB","type": "address"},
+			{"name": "_addressC","type": "address"}],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	}]
