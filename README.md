@@ -3,9 +3,9 @@
 
 ###Start a network::
    
-   First run the initialization script as ```sh ./init-start.sh```.
+   First run the initialization script as ``` ./init-start.sh```.
    This will create genesis blocks for our network.
-   Then run the network script as ```sh ./start-network.sh```.
+   Then run the network script as ``` ./start-network.sh```.
 
 
 ### Running the Quorum nodes
