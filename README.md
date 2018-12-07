@@ -3,7 +3,7 @@
 
 ###Start a network::
    
-   First run the initialization script as ``` ./init-start.sh```.
+   First run the initialization script as ``` ./init-network.sh```.
    This will create genesis blocks for our network.
    Then run the network script as ``` ./start-network.sh```.
 
