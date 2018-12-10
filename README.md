@@ -1,7 +1,7 @@
 # Ethereum_DAPP
 
 
-###Start a network::
+### Start a network::
    
    First run the initialization script as ``` ./init-network.sh```.
    This will create genesis blocks for our network.
