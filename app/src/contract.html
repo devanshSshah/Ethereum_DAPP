@@ -1,0 +1,299 @@
+<!doctype>
+<html>
+
+<head>
+    <script type="text/javascript" src="../lib/web3.js"></script>
+    <script type="text/javascript" src="../lib/abi.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+</head>
+
+<body onload="load()">
+
+    <div class="container well">
+            <nav class="navbar navbar-default">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <a class="navbar-brand" href="../index.html">Auction</a>
+                        </div>
+                        <ul class="nav navbar-nav">
+                            <li class="active"><a href="../index.html">Home</a></li>
+                            <li><a href="contract.html">Seller A</a></li>
+                            <li><a href="accountA.html">Buyer B</a></li>
+                            <li><a href="accountB.html">Buyer C</a></li>
+                        </ul>
+                        <!-- <ul class="nav navbar-nav navbar-right">
+                            <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                            <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                        </ul> -->
+                    </div>
+                </nav>
+                
+                <hr>
+        <h2> Seller Node A </h2>
+        <br>
+        <form>
+            <table>
+                <tr>
+                    <td> Contract :</td>
+                    <td>
+                        <label name="addrees" id="addrees">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Set Price :</td>
+                    <td>
+                        <input type="text" name="sellprice" id="sellprice">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td> Price :</td>
+                    <td>
+                        <label name="price" id="price">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <button type="button" onClick="contractdeploy();">Contract Create </button>
+                        <button type="button" onClick="setPrice();">Set price</button>
+                    </td>
+                </tr>
+
+            </table>
+            <hr>
+            <h1>Bid details</h1>
+            <table>
+                <tr>
+                    <td> Contract :</td>
+                    <td>
+                        <label name="caddrees" id="caddrees">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Set Price :</td>
+                    <td>
+                        <label name="sellPrice" id="sellPrice">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td> Bid by B:</td>
+                    <td>
+                        <label name="priceA" id="priceA">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td> Bid by C:</td>
+                    <td>
+                        <label name="priceB" id="priceB">
+                    </td>
+                </tr>
+
+
+            </table>
+        </form>
+    </div>
+
+
+   
+    <script type="text/javascript" src="../lib/abi.js"></script>
+    <script type="text/javascript" src="../lib/web3.js"></script>
+    <script type="text/javascript">
+
+var Web3 = require('web3');
+        var web3 = new Web3();
+        var web3second = new Web3();
+        var web3third = new Web3();
+        web3.setProvider(new web3.providers.HttpProvider('http://127.0.0.1:27000'));
+        web3second.setProvider(new web3.providers.HttpProvider('http://127.0.0.1:27001'));
+        web3third.setProvider(new web3.providers.HttpProvider('http://127.0.0.1:27002'));
+        var account = web3.eth.accounts[0];
+        var accountA = web3second.eth.accounts[0];
+        var accountB = web3third.eth.accounts[0];
+        console.log(account);
+        console.log(accountA);
+        console.log(accountB);
+
+        function load() {
+            getBidA();
+            getBidB();
+            getItemPrice();
+            document.getElementById("caddrees").innerHTML = sessionStorage.getItem("contract");
+            document.getElementById("addrees").innerHTML = sessionStorage.getItem("contract");
+            //  document.getElementById("price").value = sessionStorage.getItem("sell_price");
+            // document.getElementById("sellprice").value = sessionStorage.getItem("sell_price");
+            // document.getElementById("sellPrice").value = sessionStorage.getItem("sell_price");
+        }
+        function contractdeploy() {
+            console.log("contractInstance" + account);
+            var MyContract2 = web3.eth.contract(bid);
+            console.log(web3.personal.unlockAccount(account, "", 15000));
+            var contractInstance = MyContract2.new(account, accountA, accountB, { from: account, data: bytes, gas: 510000 }, function (e, contract) {
+                if (!e) {
+                    if (!contract.address) {
+                        console.log("Contract transaction send: TransactionHash: " + contractInstance.transactionHash + " waiting to be mined...");
+                        alert("Contract transaction send: TransactionHash: " + contractInstance.transactionHash + " waiting to be mined...");
+
+
+                    } else {
+                        console.log("Contract mined! Address: " + contract.address);
+                        sessionStorage.setItem("contract", contract.address);
+                        document.getElementById("addrees").innerHTML = contract.address;
+                        alert("Contract mined! Address: " + contractInstance.address);
+
+                    }
+
+                } else {
+                    console.log(e);
+                }
+            });
+        }
+
+
+
+        function setPrice() {
+            var contract = sessionStorage.getItem("contract");
+            var bidvalue = document.getElementById("sellprice").value;
+            var MyContract = web3.eth.contract(bid);
+            console.log(web3.personal.unlockAccount(account, "", 15000));
+            var myContractInstance = MyContract.at(contract);
+            var result = myContractInstance.setItem(bidvalue, {
+                from: account,
+                gas: 400000
+            }, function (e, res) {
+                console.log("Errro" + e);
+                console.log("txs" + res);
+                if (!e) {
+                    alert("Contract transaction send: TransactionHash: " + res + " waiting to be mined...");
+                    console.log(res);
+                    // document.getElementById("sellprice").value = res;
+                    document.getElementById("price").innerHTML = bidvalue;
+                    sessionStorage.setItem("sell_price", bidvalue);
+                } else {
+                    console.log(e);
+                }
+            });
+        }
+
+
+        function getItemPrice() {
+            var MyContract = web3.eth.contract(bid);
+            var contract_address = sessionStorage.getItem("contract");
+            var myContractInstance = MyContract.at(contract_address);
+            console.log(web3.personal.unlockAccount(account, "", 15000));
+            result = myContractInstance.getItemPrice.call({
+                from: account,
+                gas: 400000
+            }, function (e, res) {
+                console.log("Errro" + e);
+                console.log("txs" + res);
+                if (!e) {
+                    console.log(res);
+                    document.getElementById("sellprice").value = res;
+                    document.getElementById("sellPrice").innerHTML = res;
+                } else {
+                    console.log(e);
+                }
+            });
+        }
+
+
+        function setBidA() {
+            var bid_value = document.getElementById("bid").innerHTML;
+            var MyContract = web3.eth.contract(bid);
+            var contract_address = sessionStorage.getItem("contract");
+            var myContractInstance = MyContract.at(contract_address);
+            //var account = accountA;
+            console.log(web3.personal.unlockAccount(accountA, "", 15000));
+            result = myContractInstance.bid(bid_value, {
+                from: accountA,
+                gas: 400000
+            },
+                function (e, res) {
+                    console.log("Errro" + e);
+                    console.log("txs" + res);
+                    if (!e) {
+                        console.log(res);
+                    } else {
+                        console.log(e);
+                    }
+                });
+        }
+
+
+        function setBidB() {
+            var bid_value = document.getElementById("price").innerHTML;
+            var MyContract = web3.eth.contract(bid);
+            var contract_address = sessionStorage.getItem("contract");
+            var myContractInstance = MyContract.at(contract_address);
+            // var account = web3.personal.listAccounts[0];
+            console.log(web3.personal.unlockAccount(accountB, "", 15000));
+            result = myContractInstance.bid(bid_value, {
+                from: accountB,
+                gas: 400000
+            },
+                function (e, res) {
+                    console.log("Errro" + e);
+                    console.log("txs" + res);
+                    if (!e) {
+                        console.log(res);
+                    } else {
+                        console.log(e);
+                    }
+                });
+        }
+
+
+        function getBidA() {
+            var MyContract = web3.eth.contract(bid);
+            var contract_address = sessionStorage.getItem("contract");
+            var myContractInstance = MyContract.at(contract_address);
+            console.log(web3.personal.unlockAccount(account, "", 15000));
+            result = myContractInstance.getBid.call(accountA, {
+                from: account,
+                gas: 400000
+            },
+                function (e, res) {
+                    console.log("Errro" + e);
+                    console.log("txs" + res);
+                    document.getElementById("priceA").innerHTML = res
+                    if (!e) {
+                        console.log(res);
+                    } else {
+                        console.log(e);
+                    }
+                });
+        }
+
+
+        function getBidB() {
+            var MyContract = web3.eth.contract(bid);
+            var contract_address = sessionStorage.getItem("contract");
+            var myContractInstance = MyContract.at(contract_address);
+            console.log(web3.personal.unlockAccount(account, "", 15000));
+            result = myContractInstance.getBid.call(accountB, {
+                from: account,
+                gas: 400000
+            },
+                function (e, res) {
+                    console.log("Errro" + e);
+                    console.log("txs" + res);
+                    document.getElementById("priceB").innerHTML = res
+                    if (!e) {
+                        console.log(res);
+                    } else {
+                        console.log(e);
+                    }
+                });
+        }
+      
+
+        
+    </script>
+</body>
+
+</html>

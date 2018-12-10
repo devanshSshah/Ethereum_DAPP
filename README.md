@@ -18,3 +18,28 @@ It is recommended to use separate terminal windows for each node we are inspecti
 - In terminal 1 run `./bin/geth attach ipc:qdata/ddA/geth.ipc` to attach to node A
 - In terminal 2 run `./bin/geth attach ipc:qdata/ddB/geth.ipc` to attach to node B
 - In terminal 3 run `./bin/geth attach ipc:qdata/ddC/geth.ipc` to attach to node C
+
+Now start mining in any of the nodes by using the following command:
+ ``` miner.start(4) ```.
+
+### Running the Application:
+
+### Selling:
+Open the `index`(in the app folder) page in any browser.
+
+Then go to the seller page. Here first create a contract(i.e. deploy a contract) through the Contract Create Button.
+ The transaction hash will be displayed and followed by the contract address. NOTE : If you havent started the mining in any nodes, please do so!! 
+
+Then set the Item Price.
+
+### Bidding:
+
+Now go the buyer A page. Here all the details(i.e. contract address, item price) will be shown. 
+
+Now place your bid against the price already set by the seller and reload the page to update the page details.
+
+Do the same things with different bid price on the buyer C page.
+
+### Getting Bid Info:
+
+Go back to the Seller page where all the information will be displayed.
