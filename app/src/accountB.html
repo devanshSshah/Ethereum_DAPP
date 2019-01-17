@@ -30,6 +30,10 @@
         </nav>
         <hr>
         <h2> Buyer Node C </h2>
+        <h3> Address:  <p  id="address"></p></h3>
+        <h3> Balance: <p id="balance"></p></h3>
+        <h3> Balance held by Contract: <p id="balanceByContract"></p></h3>
+
         <br>
         <form>
             <table>
@@ -112,15 +116,14 @@
             getBidB();
             document.getElementById("caddrees").innerHTML = sessionStorage.getItem("contract");
             document.getElementById("addrees").innerHTML = sessionStorage.getItem("contract");
-            // document.getElementById("price").value = sessionStorage.getItem("sell_price");
-            // document.getElementById("sellprice").value = sessionStorage.getItem("sell_price");
-            // document.getElementById("sellPrice").value = sessionStorage.getItem("sell_price");
+            document.getElementById("address").innerHTML = accountB;
+            document.getElementById("balance").innerHTML = web3third.fromWei(web3third.eth.getBalance(web3third.eth.accounts[0]),"ether")
+            var contract_address = sessionStorage.getItem("contract");
+            document.getElementById("balanceByContract").innerHTML = web3second.fromWei(web3second.eth.getBalance(contract_address),"ether")
+            document.getElementById("price").value = sessionStorage.getItem("sell_price");
+            document.getElementById("sellprice").value = sessionStorage.getItem("sell_price");
+            document.getElementById("sellPrice").value = sessionStorage.getItem("sell_price");
         }
-
-
-
-
-
 
         function getItemPrice() {
             var MyContract = web3.eth.contract(bid);
@@ -153,7 +156,8 @@
             console.log(web3third.personal.unlockAccount(accountB, "", 15000));
             result = myContractInstance.bid(bid_value, {
                 from: accountB,
-                gas: 400000
+                gas: 400000,
+                value: bid_value
             },
                 function (e, res) {
 
@@ -165,6 +169,7 @@
                         console.log(e);
                     }
                 });
+	 load();
         }
 
 

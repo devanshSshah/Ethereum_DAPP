@@ -12,26 +12,33 @@
 <body onload="load()">
 
     <div class="container well">
-            <nav class="navbar navbar-default">
-                    <div class="container-fluid">
-                        <div class="navbar-header">
-                            <a class="navbar-brand" href="../index.html">Auction</a>
-                        </div>
-                        <ul class="nav navbar-nav">
-                            <li class="active"><a href="../index.html">Home</a></li>
-                            <li><a href="contract.html">Seller A</a></li>
-                            <li><a href="accountA.html">Buyer B</a></li>
-                            <li><a href="accountB.html">Buyer C</a></li>
-                        </ul>
-                        <!-- <ul class="nav navbar-nav navbar-right">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="../index.html">Auction</a>
+                </div>
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="../index.html">Home</a></li>
+                    <li><a href="contract.html">Seller A</a></li>
+                    <li><a href="accountA.html">Buyer B</a></li>
+                    <li><a href="accountB.html">Buyer C</a></li>
+                </ul>
+                <!-- <ul class="nav navbar-nav navbar-right">
                             <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
                             <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
                         </ul> -->
-                    </div>
-                </nav>
-                
-                <hr>
+            </div>
+        </nav>
+
+        <hr>
         <h2> Seller Node A </h2>
+        <h3> Address: <p id="address"></p>
+        </h3>
+        <h3> Balance: <p id="balance"></p>
+        </h3>
+        <h3> Balance held by Contract: <p id="balanceByContract"></p>
+        </h3>
+
         <br>
         <form>
             <table>
@@ -92,19 +99,24 @@
                         <label name="priceB" id="priceB">
                     </td>
                 </tr>
+                <tr>
+                    <td>
+                        <button type="button" onClick="selectbidder();"> Choose Buyer & Sell Item </button>
 
+                    </td>
+                </tr>
 
             </table>
         </form>
     </div>
 
 
-   
+
     <script type="text/javascript" src="../lib/abi.js"></script>
     <script type="text/javascript" src="../lib/web3.js"></script>
     <script type="text/javascript">
 
-var Web3 = require('web3');
+        var Web3 = require('web3');
         var web3 = new Web3();
         var web3second = new Web3();
         var web3third = new Web3();
@@ -124,7 +136,11 @@ var Web3 = require('web3');
             getItemPrice();
             document.getElementById("caddrees").innerHTML = sessionStorage.getItem("contract");
             document.getElementById("addrees").innerHTML = sessionStorage.getItem("contract");
-            //  document.getElementById("price").value = sessionStorage.getItem("sell_price");
+            document.getElementById("address").innerHTML = account;
+            document.getElementById("balance").innerHTML = web3.fromWei(web3.eth.getBalance(web3.eth.accounts[0]), "ether")
+            var contract_address = sessionStorage.getItem("contract");
+            document.getElementById("balanceByContract").innerHTML = web3second.fromWei(web3second.eth.getBalance(contract_address), "ether")
+            // document.getElementById("price").value = sessionStorage.getItem("sell_price");
             // document.getElementById("sellprice").value = sessionStorage.getItem("sell_price");
             // document.getElementById("sellPrice").value = sessionStorage.getItem("sell_price");
         }
@@ -132,7 +148,7 @@ var Web3 = require('web3');
             console.log("contractInstance" + account);
             var MyContract2 = web3.eth.contract(bid);
             console.log(web3.personal.unlockAccount(account, "", 15000));
-            var contractInstance = MyContract2.new(account, accountA, accountB, { from: account, data: bytes, gas: 510000 }, function (e, contract) {
+            var contractInstance = MyContract2.new(account, accountA, accountB, { from: account, data: bytes, gas: 1100000, value: 0 }, function (e, contract) {
                 if (!e) {
                     if (!contract.address) {
                         console.log("Contract transaction send: TransactionHash: " + contractInstance.transactionHash + " waiting to be mined...");
@@ -143,6 +159,8 @@ var Web3 = require('web3');
                         console.log("Contract mined! Address: " + contract.address);
                         sessionStorage.setItem("contract", contract.address);
                         document.getElementById("addrees").innerHTML = contract.address;
+                        document.getElementById("balanceByContract").innerHTML = web3.fromWei(web3.eth.getBalance(contract.address), "ether")
+
                         alert("Contract mined! Address: " + contractInstance.address);
 
                     }
@@ -177,6 +195,7 @@ var Web3 = require('web3');
                     console.log(e);
                 }
             });
+            load();
         }
 
 
@@ -290,9 +309,28 @@ var Web3 = require('web3');
                     }
                 });
         }
-      
 
-        
+        function selectbidder() {
+            var MyContract = web3.eth.contract(bid);
+            var contract_address = sessionStorage.getItem("contract");
+            var myContractInstance = MyContract.at(contract_address);
+            console.log(web3.personal.unlockAccount(account, "", 15000));
+            result = myContractInstance.selectbidder.call({
+                from: account,
+                gas: 400000
+            },
+                function (e, res) {
+                    console.log("Errro" + e);
+                    console.log("txs" + res);
+                    // document.getElementById("priceB").innerHTML = res
+                    if (!e) {
+                        console.log(res);
+                    } else {
+                        console.log(e);
+                    }
+                });
+        }
+
     </script>
 </body>
 

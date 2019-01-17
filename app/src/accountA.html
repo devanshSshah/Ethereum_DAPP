@@ -30,6 +30,11 @@
                 </nav>
                 <hr>
         <h2> Buyer Node B </h2>
+        <h3> Address:  <p  id="address"></p></h3>
+        <h3> Balance: <p id="balance"></p></h3>
+
+        <h3> Balance held by Contract: <p id="balanceByContract"></p></h3>
+
         <br>
         <form>
             <table>
@@ -115,15 +120,40 @@
         function load() {
             getBidA();
             getItemPrice();
+            //getContractBalance();
             document.getElementById("caddrees").innerHTML = sessionStorage.getItem("contract");
             document.getElementById("addrees").innerHTML = sessionStorage.getItem("contract");
-            // document.getElementById("price").value = sessionStorage.getItem("sell_price");
-            // document.getElementById("sellprice").value = sessionStorage.getItem("sell_price");
-            // document.getElementById("sellPrice").value = sessionStorage.getItem("sell_price");
+            document.getElementById("address").innerHTML = accountA;
+            document.getElementById("balance").innerHTML = web3second.fromWei(web3second.eth.getBalance(web3second.eth.accounts[0]),"ether")
+            var contract_address = sessionStorage.getItem("contract");
+            document.getElementById("balanceByContract").innerHTML = web3second.fromWei(web3second.eth.getBalance(contract_address),"ether")
+            document.getElementById("price").value = sessionStorage.getItem("sell_price");
+            document.getElementById("sellprice").value = sessionStorage.getItem("sell_price");
+            document.getElementById("sellPrice").value = sessionStorage.getItem("sell_price");
         }
 
 
-
+        // function getContractBalance() {
+        //     var MyContract = web3.eth.contract(bid);
+        //     var contract_address = sessionStorage.getItem("contract");
+        //     var myContractInstance = MyContract.at(contract_address);
+        //     console.log(web3.personal.unlockAccount(account, "", 15000));
+        //     result = myContractInstance.getItemPrice.call({
+        //         from: account,
+        //         gas: 400000
+        //     }, function (e, res) {
+        //         console.log("Errro" + e);
+        //         console.log("txs" + res);
+        //         if (!e) {
+                    
+        //             console.log(res);
+        //             document.getElementById("balanceByContract").innerHTML = res;
+        //             document.getElementById("balanceByContract").innerHTML = res;
+        //         } else {
+        //             console.log(e);
+        //         }
+        //     });
+        // }
 
 
 
@@ -158,7 +188,8 @@
             console.log(web3second.personal.unlockAccount(accountA, "", 15000));
             result = myContractInstance.bid(bid_value, {
                 from: accountA,
-                gas: 400000
+                gas: 400000,
+                value: bid_value
             },
                 function (e, res) {
                     console.log("Errro" + e);
@@ -172,6 +203,7 @@
                         console.log(e);
                     }
                 });
+	 load();
         }
 
 
