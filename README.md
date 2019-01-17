@@ -1,7 +1,10 @@
 # Ethereum_DAPP
 
+##Changes Made:
+ The buyer places th bid in the form of an ether payment and this ether is stored by the smart contract. So the smart contract acts as an escrow account. When the seller calls the function of slecting the final bidder, the higer bid gets selected and the funds are transferred or refunded accordingly.
 
-### Start a network::
+
+### Start a network:
    
    First run the initialization script as ``` ./init-network.sh```.
    This will create genesis blocks for our network.
